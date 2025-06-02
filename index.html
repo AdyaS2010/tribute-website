@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The 64th Square: A Tribute to Chess</title>
+    <meta name="description" content="An artistic tribute to chess - celebrating the royal game's legacy, masters, and timeless beauty">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -44,7 +48,7 @@
 
 </body>
 -->
-
+<!--
 <body>
     <header class="hero">
         <h1>The 64th Square</h1>
@@ -55,7 +59,7 @@
         <section class="intro">
             <h2>Welcome to the Board</h2>
             <p>Chess is not merely a game - it's a journey, a philosophy, a battle of ideas - played across 64 squares.</p>
-            <!-- <p>Here, we celebrate the beauty, strategy, and timeless allure of chess.</p> -->
+            <p>Here, we celebrate the beauty, strategy, and timeless allure of chess.</p>
             <p>This tribute encourages those to see the beauty beyond the board.</p>
         </section>
     </main>
@@ -63,7 +67,7 @@
     <section id="chessboard">
         <h2>The Board</h2>
         <div class="board">
-            <!-- Chessboard HTML structure -->
+            Chessboard HTML structure
         </div>
     </section>
 
@@ -75,5 +79,62 @@
     <script src="script.js"></script>
 
 </body>
+-->
 
+<body>
+    <!-- floating navigation (scrolling) -->
+    <nav class="floating-nav" id="floating-nav">
+        <a href="#home" class="nav-item active">Home</a>
+        <a href="#legacy" class="nav-item">Legacy</a>
+        <a href="#masters" class="nav-item">Masters</a>
+        <a href="#board" class="nav-item">The Board</a>
+        <a href="#philosophy" class="nav-item">Philosophy</a>
+    </nav>
+    <!-- 'hero' sect -->
+    <section id="home" class="hero-section">
+        <div class="hero-background">
+            <div class="chess-pattern"></div>
+            <div class="floating-pieces">
+                <span class="floating-piece">♔</span>
+                <span class="floating-piece">♕</span>
+                <span class="floating-piece">♖</span>
+                <span class="floating-piece">♗</span>
+                <span class="floating-piece">♘</span>
+                <span class="floating-piece">♙</span>
+            </div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="tribute-badge">
+                <span class="badge-text">A Tribute</span>
+            </div>
+
+            <h1 class="hero-title">
+                <span class="title-line">The</span>
+                <span class="title-main">64th Square</span>
+                <span class="title-subtitle">Where Legends Are Born</span>
+            </h1>
+            <div class="hero-description">
+                <p class="hero-tagline">Chess is not merely a game—it is art, philosophy, and war combined into sixty-four squares of infinite possibility.</p>
+            </div>
+
+            <div class="hero-actions">
+                <button class="cta-button primary" onclick="scrollToSection('legacy')">
+                    <span>Explore the Legacy</span>
+                    <span class="button-icon">♔</span>
+                </button>
+                <button class="cta-button secondary" onclick="scrollToSection('board')">
+                    <span>See the Board</span>
+                    <span class="button-icon">♟</span>
+                </button>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+            <span class="scroll-text">Scroll to Begin</span>
+        </div>
+    </section>
+
+    <!-- timeline of legacy -->
+</body>
 </html>
