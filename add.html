@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>♔ The 64th Square - A Tribute to Chess ♔</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-blue: #0c1945;
+            --deep-blue: #1a237e;
+            --accent-blue: #3949ab;
+            --light-blue: #7986cb;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --dark-bg: #000814;
+            --card-bg: rgba(25, 35, 126, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--royal-blue) 50%, #001122 100%);
+            color: #e8eaf6;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .chess-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: -1;
+            background-image: 
+                linear-gradient(45deg, var(--deep-blue) 25%, transparent 25%), 
+                linear-gradient(-45deg, var(--deep-blue) 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, var(--deep-blue) 75%), 
+                linear-gradient(-45deg, transparent 75%, var(--deep-blue) 75%);
+            background-size: 80px 80px;
+            background-position: 0 0, 0 40px, 40px -40px, -40px 0px;
+            animation: chessBgMove 25s linear infinite;
+        }
+
+        @keyframes chessBgMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(80px, 80px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scroll-element {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .scroll-element.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 100px 0 80px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #ffecb3, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            animation: titleGlow 4s ease-in-out infinite;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.1); }
+        }
+
+        .hero-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--light-blue);
+            margin-bottom: 20px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .hero-tagline {
+            font-size: 1.2rem;
+            color: #9fa8da;
+            font-style: italic;
+            margin-bottom: 50px;
+        }
+
+        .piece-display {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+
+        .chess-piece {
+            font-size: 5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            animation: pieceFloat 4s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(57, 73, 171, 0.3));
+        }
+
+        .chess-piece:nth-child(odd) {
+            animation-delay: -2s;
+        }
+
+        .chess-piece:hover {
+            transform: scale(1.4) rotate(15deg);
+            filter: drop-shadow(0 10px 25px rgba(255, 215, 0, 0.5));
+            text-shadow: 0 0 30px var(--gold);
+        }
+
+        @keyframes pieceFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .knight-mascot {
+            position: fixed;
+            right: -100px;
+            top: 50%;
+            font-size: 4rem;
+            z-index: 1000;
+            transition: all 0.6s ease;
+            cursor: pointer;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+        }
+
+        .knight-mascot.show {
+            right: 20px;
+            animation: knightBounce 2s ease-in-out;
+        }
+
+        @keyframes knightBounce {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-20px) rotate(-10deg); }
+            75% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .speech-bubble {
+            position: absolute;
+            right: 100px;
+            top: -40px;
+            background: linear-gradient(135deg, var(--royal-blue), var(--deep-blue));
+            color: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.3s ease;
+            border: 2px solid var(--gold);
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 10px solid transparent;
+            border-left-color: var(--deep-blue);
+        }
+
+        .knight-mascot:hover .speech-bubble {
+            opacity: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 40px;
+            margin: 80px 0;
+        }
+
+        .card {
+            background: linear-gradient(135deg, var(--card-bg), rgba(15, 23, 42, 0.8));
+            border: 3px solid rgba(57, 73, 171, 0.4);
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: rgba(255, 215, 0, 0.6);
+            box-shadow: 0 25px 50px rgba(57, 73, 171, 0.3);
+        }
+
+        .card h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #c5cae9;
+        }
+
+        .mini-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3px;
+            margin: 25px 0;
+            background: var(--deep-blue);
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .mini-square {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 4px;
+        }
+
+        .mini-square.white {
+            background: #f8f9ff;
+            color: #1a237e;
+        }
+
+        .mini-square.black {
+            background: #3c4043;
+            color: #f8f9ff;
+        }
+
+        .mini-square:hover {
+            transform: scale(1.15) rotate(5deg);
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .quote-section {
+            text-align: center;
+            margin: 100px 0;
+            padding: 50px;
+            background: linear-gradient(135deg, rgba(25, 35, 126, 0.2), rgba(15, 23, 42, 0.4));
+            border-radius: 25px;
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .quote {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            font-style: italic;
+            color: var(--light-blue);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .quote-author {
+            color: var(--gold);
+            font-size: 1.3rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+        }
+
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(25, 35, 126, 0.3));
+            border-radius: 25px;
+            padding: 50px;
+            margin: 60px 0;
+            border: 3px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(15px);
+        }
+
+        .interactive-section h3 {
+            font-family: 'Cinzel', serif;
+            text-align: center;
+            color: var(--gold);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .puzzle-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 2px;
+            max-width: 450px;
+            margin: 30px auto;
+            background: var(--deep-blue);
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid var(--gold);
+        }
+
+        .puzzle-square {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            border-radius: 4px;
+        }
+
+        .puzzle-square.white {
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .puzzle-square.black {
+            background: #475569;
+            color: #f8fafc;
+        }
+
+        .puzzle-square:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+        }
+
+        .puzzle-square.movable {
+            border: 3px solid var(--gold);
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        .puzzle-square.highlight {
+            background: rgba(34, 197, 94, 0.8) !important;
+            animation: highlight 0.6s ease;
+        }
+
+        @keyframes highlight {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .hidden-gem {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, var(--gold), #b8860b);
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.4s ease;
+            animation: gemPulse 2.5s ease-in-out infinite;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes gemPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        .hidden-gem:hover {
+            opacity: 1;
+            transform: scale(1.4);
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        .secret-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, var(--royal-blue), var(--deep-blue));
+            color: #e8eaf6;
+            padding: 40px;
+            border-radius: 20px;
+            border: 3px solid var(--gold);
+            display: none;
+            z-index: 1000;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            max-width: 500px;
+        }
+
+        .secret-message h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .moves-display {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+            justify-content: center;
+        }
+
+        .move-notation {
+            background: rgba(57, 73, 171, 0.3);
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            color: #e8eaf6;
+            font-weight: 600;
+        }
+
+        .move-notation:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-3px);
+            border-color: var(--gold);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 80px 0 60px;
+            color: #9fa8da;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+            margin-top: 100px;
+            font-size: 1.1rem;
+        }
+
+        .footer .main-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--light-blue);
+        }
+
+        .footer .credit {
+            font-style: italic;
+            color: var(--gold);
+            margin-top: 15px;
+        }
+
+        .sound-toggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: rgba(25, 35, 126, 0.9);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            color: var(--gold);
+            padding: 12px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(15px);
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+        }
+
+        .sound-toggle:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .hero-subtitle { font-size: 1.4rem; }
+            .chess-piece { font-size: 3.5rem; }
+            .grid { grid-template-columns: 1fr; gap: 30px; }
+            .quote { font-size: 1.6rem; }
+            .piece-display { gap: 25px; }
+            .knight-mascot { display: none; }
+        }
+
+        .fade-in-section {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chess-bg"></div>
+    
+    <div class="sound-toggle" id="soundToggle">♪ Royal Sounds</div>
+    
+    <div class="knight-mascot" id="knightMascot">
+        ♞
+        <div class="speech-bubble">Greetings, noble player!</div>
+    </div>
+    
+    <div class="container">
+        <header class="hero scroll-element">
+            <h1 onclick="playMoveSound()">♔ The 64th Square ♔</h1>
+            <p class="hero-subtitle">A Royal Tribute to Chess</p>
+            <p class="hero-tagline">Where strategy meets artistry, and every move tells a story</p>
+            
+            <div class="piece-display">
+                <span class="chess-piece" onclick="showSecret('king')" title="The Sovereign">♔</span>
+                <span class="chess-piece" onclick="showSecret('queen')" title="The Empress">♕</span>
+                <span class="chess-piece" onclick="showSecret('rook')" title="The Castle">♖</span>
+                <span class="chess-piece" onclick="showSecret('bishop')" title="The Oracle">♗</span>
+                <span class="chess-piece" onclick="showSecret('knight')" title="The Valiant">♘</span>
+                <span class="chess-piece" onclick="showSecret('pawn')" title="The Dreamer">♙</span>
+            </div>
+        </header>
+
+        <div class="grid">
+            <div class="card scroll-element">
+                <div class="hidden-gem" onclick="showSecret('gem1')"></div>
+                <h3>Opening Mastery</h3>
+                <p>In the grand theater of chess, every opening is a prelude to brilliance. The Italian Game, showcased below, exemplifies classical development principles - central control, rapid piece activation, and preparation for the middlegame battles ahead. Each move builds upon the last, creating a symphony of strategy.</p>
+                <div class="mini-board" onclick="animateOpening()">
+                    <div class="mini-square white">♜</div>
+                    <div class="mini-square black">♞</div>
+                    <div class="mini-square white">♝</div>
+                    <div class="mini-square black">♛</div>
+                    <div class="mini-square black">♟</div>
+                    <div class="mini-square white">♟</div>
+                    <div class="mini-square black">♟</div>
+                    <div class="mini-square white">♟</div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white">♗</div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square black">♙</div>
+                    <div class="mini-square white">♙</div>
+                    <div class="mini-square black">♙</div>
+                    <div class="mini-square white">♙</div>
+                </div>
+                <div class="moves-display">
+                    <span class="move-notation" onclick="playMoveSound()">1.e4</span>
+                    <span class="move-notation" onclick="playMoveSound()">1...e5</span>
+                    <span class="move-notation" onclick="playMoveSound()">2.Nf3</span>
+                    <span class="move-notation" onclick="playMoveSound()">2...Nc6</span>
+                    <span class="move-notation" onclick="playMoveSound()">3.Bc4</span>
+                </div>
+            </div>
+
+            <div class="card scroll-element">
+                <div class="hidden-gem" onclick="showSecret('gem2')"></div>
+                <h3>Tactical Brilliance</h3>
+                <p>In the crucible of combat, tactical motifs emerge like precious gems. The royal fork demonstrated here shows the knight's unique power - simultaneously attacking both king and queen. Such patterns are the building blocks of chess mastery, turning strategic plans into decisive victories.</p>
+                <div class="mini-board" onclick="animateTactic()">
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white">♕</div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black">♞</div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white">♔</div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white"></div>
+                </div>
+                <p style="margin-top: 20px; color: var(--light-blue); font-style: italic; text-align: center;">Click the board to witness the knight's royal fork!</p>
+            </div>
+
+            <div class="card scroll-element">
+                <div class="hidden-gem" onclick="showSecret('gem3')"></div>
+                <h3>Endgame Poetry</h3>
+                <p>When the dust settles and few pieces remain, chess reveals its purest form. The king and pawn endgame represents the essence of chess - precise calculation, deep understanding, and the transformation of humble pawns into mighty queens. Here, every tempo matters, every square counts.</p>
+                <div class="mini-board" onclick="animateEndgame()">
+                    <div class="mini-square white">♔</div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white">♙</div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square black"></div>
+                    <div class="mini-square white"></div>
+                    <div class="mini-square black">♚</div>
+                    <div class="mini-square white"></div>
+                </div>
+                <p style="margin-top: 20px; color: var(--light-blue); font-style: italic; text-align: center;">The path to promotion - where pawns become legends</p>
+            </div>
+        </div>
+
+        <div class="quote-section scroll-element">
+            <div class="quote" onclick="cycleQuote()">"Chess is the gymnasium of the mind."</div>
+            <div class="quote-author">— Blaise Pascal</div>
+            <p style="margin-top: 25px; color: #9fa8da; font-size: 1rem;">Click the quote to discover more wisdom from the masters</p>
+        </div>
+
+        <div class="interactive-section scroll-element">
+            <h3>Royal Chess Puzzle</h3>
+            <p style="text-align: center; margin-bottom: 25px; font-size: 1.2rem; color: #c5cae9;">
+                Find the checkmate in 2 moves! Click on the white queen to see possible moves.
+            </p>
+            <div class="puzzle-board" id="puzzleBoard">
+                <!-- Puzzle position will be generated by JavaScript -->
+            </div>
+            <p style="text-align: center; margin-top: 25px; color: var(--light-blue); font-style: italic; font-size: 1.1rem;" id="puzzleHint">
+                Hint: The white queen holds the key to victory...
+            </p>
+        </div>
+
+        <footer class="footer scroll-element">
+            <p class="main-text">♔ In chess, as in life, every move shapes destiny ♔</p>
+            <p>Where 64 squares contain infinite worlds of possibility</p>
+            <p class="credit">Created with passion and dedication by Adya • 2025</p>
+        </footer>
+    </div>
+
+    <div class="secret-message" id="secretMessage">
+        <h3>🏆 Royal Secret Discovered!</h3>
+        <p id="secretText"></p>
+        <button onclick="hideSecret()" style="margin-top: 25px; background: var(--gold); color: var(--royal-blue); border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-family: 'Cinzel', serif; font-weight: 600;">Close</button>
+    </div>
+
+    <script>
+        let soundEnabled = true;
+        let selectedPiece = null;
+        let puzzleSolved = false;
+        
+        const quotes = [
+            { text: "Chess is the gymnasium of the mind.", author: "Blaise Pascal" },
+            { text: "Every chess master was once a beginner.", author: "Irving Chernev" },
+            { text: "Chess is mental torture.", author: "Garry Kasparov" },
+            { text: "The pawns are the soul of chess.", author: "François-André Danican Philidor" },
+            { text: "Chess is a war over the board. The object is to crush the opponent's mind.", author: "Bobby Fischer" },
+            { text: "I prefer to lose a really good game than to win a bad one.", author: "David Levy" },
+            { text: "Chess is life in miniature.", author: "Garry Kasparov" }
+        ];
+        let currentQuoteIndex = 0;
+
+        const secrets = {
+            'king': "The King - The Sovereign of the board! Though weakest in power, he is the soul of the game. His safety determines victory or defeat. Guard him well, for kingdoms rise and fall on his fate!",
+            'queen': "The Queen - The Empress of chess! Born from the humble 'Fers' of ancient games, she evolved into the most powerful piece. Her reign over rank and file makes her the crown jewel of any army!",
+            'rook': "The Rook - The Castle guardian! These stalwart towers command open files like ancient fortresses. Give them clear paths and they'll rain power across the entire battlefield!",
+            'bishop': "The Bishop - The Oracle of diagonals! These spiritual warriors see far into the distance, their prayers answered through long-range strikes. Light and dark squared bishops complement each other perfectly!",
+            'knight': "The Knight - The Valiant steed! The most noble of pieces, leaping over obstacles that stop others. Its L-shaped gallop creates patterns of beauty and brings tactical magic to every position!",
+            'pawn': "The Pawn - The Dreamer! These humble foot soldiers carry the greatest dreams - to cross the board and transform into queens! Never underestimate their power, for they are the soul of chess!",
+            'gem1': "🎭 Opening Secret
+        }
+          </script>
+    </body>
+</html>
